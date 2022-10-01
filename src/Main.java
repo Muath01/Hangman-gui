@@ -1,4 +1,5 @@
-import java.util.Scanner;
+import java.util.Scanner;  // Import the Scanner class
+
 import java.util.*;
 
 
@@ -9,26 +10,53 @@ public class Main {
     // Word: e.ll.
     // Not use: abcd.f
 
-    int live = 3;
+    static void displayDashes(char[] letters){
+        for (int i = 0; i< letters.length; i++){
+            letters[i] = '_';
+        }
+    }
+
+    static void displayLives(int lives){
+        for (int i = 0; i< lives; i++){
+            System.out.print("o");
+        }
+        System.out.println();
+    }
+
+    static boolean checkGuesses(String randomWord, boolean isGuessCorrect, char letter, char[] letters, int gameLives){
+        isGuessCorrect = false;
+        for (int i = 0; i < randomWord.length(); i++){
+            char l = randomWord.charAt(i);
+            if(l == letter){
+                letters[i] = l;
+                isGuessCorrect = true;
+                return true;
+            }
+        }
+
+        if(!isGuessCorrect){
+            gameLives--;
+            return false;
+        }
+        return false;
+    }
+
 
     public static void main(String[] args) {
 
         System.out.println("Starting game");
-
         int lives = 3;
+
 
         Scanner scanner = new Scanner(System.in);
         String[] words = new String[] {"computer", "mouse", "screen"};
 
-//        String randomWord = words[(int) Math.random() * words.length];
         String randomWord = words[(int)(Math.random() * words.length)];
         char[] letters = new char[randomWord.length()];
         System.out.println("here");
 
-        // _ for every unguessed letter
-            for (int i = 0; i < letters.length; i++){
-                  letters[i] = '_';
-              }
+        displayDashes(letters);
+
 
         // While loop until no lives are available
         while(lives > 0){
@@ -36,14 +64,9 @@ public class Main {
 
 
 
+            displayLives(lives);
 
-
-            // Number of lives
-            for (int i = 0; i < lives; i++){
-                System.out.print("o");
-            }
-
-            System.out.println();
+//            System.out.println();
 
             System.out.print("Input: ");
 
@@ -53,20 +76,12 @@ public class Main {
             char letter = input.charAt(0);
 
 
-            // Checking guesses.
             boolean isGuessCorrect = false;
-            for (int i = 0; i < randomWord.length(); i++){
-                char l = randomWord.charAt(i);
-                if(l == letter){
-                    letters[i] = l;
-                    isGuessCorrect = true;
-                }
-            }
 
-            if(!isGuessCorrect){
+            checkGuesses(randomWord, isGuessCorrect, letter, letters, lives);
+            if (!checkGuesses(randomWord, isGuessCorrect, letter, letters, lives)){
                 lives--;
-
-            }
+            };
 
             boolean isGameFinished = true;
 
@@ -80,7 +95,7 @@ public class Main {
             }
 
             if(isGameFinished){
-                System.out.println("You won the Game!");
+                System.out.println("\nYou won the Game!");
                 break;
             }
             System.out.println();
